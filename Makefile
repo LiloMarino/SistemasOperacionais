@@ -1,17 +1,17 @@
 # Nome do executável
-EXEC_NAME = programa
+EXEC_NAME = meuPrograma
 
 # Nome do zip
-ZIP_NAME = programa
+ZIP_NAME = MuriloAldigueriMarino-[B]
 
 # Lista de arquivos fonte
 SOURCES = main.cpp
 
-# Lista de headers automaticamente (qualquer .cpp que não seja main.cpp)
+# Lista de headers (se houver)
 HEADERS = $(patsubst %.cpp,%.hpp,$(filter-out main.cpp,$(SOURCES)))
 
 # Lista todos os arquivos envolvidos
-FILES = $(SOURCES) $(HEADERS) Makefile
+FILES = $(SOURCES) $(HEADERS) Makefile relatorio.md source.html
 
 # Definir o compilador
 CXX = g++
@@ -23,7 +23,7 @@ CXXFLAGS = -Wall -Wextra -std=c++17 -g
 OBJECTS = $(SOURCES:.cpp=.o)
 
 # Alvo padrão
-all: $(LEXER) $(PARSER) $(EXEC_NAME)
+all: $(EXEC_NAME)
 
 # Regras de compilação
 $(EXEC_NAME): $(OBJECTS)
@@ -38,12 +38,11 @@ $(EXEC_NAME): $(OBJECTS)
 run: all $(EXEC_NAME)
 	./$(EXEC_NAME)
 
-# zip: Zippa os arquivos fonte
+# zip: Zippa os arquivos fonte e relatório
 zip: $(ZIP_NAME).zip
 
 $(ZIP_NAME).zip: $(FILES)
 	zip -r $(ZIP_NAME).zip $(FILES)
-	mkdir -p $(ZIP_NAME)
 	unzip -q $(ZIP_NAME).zip -d $(ZIP_NAME)
 
 # clean: Limpa todos os arquivos gerados da compilação
@@ -59,4 +58,4 @@ valgrind: all
 
 finish: all run clean zip
 
-.PHONY: all clean run zip
+.PHONY: all clean run zip valgrind finish
