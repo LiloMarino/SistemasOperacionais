@@ -89,25 +89,29 @@ exit_group(0)                           = ?
 
 ## Análise das Chamadas de Sistema
 
-| **Chamada**  | **Descrição**                                                                        |
-| ------------ | ------------------------------------------------------------------------------------ |
-| `execve`     | Executa o programa `meuPrograma` no processo atual.                                  |
-| `brk`        | Aloca ou desaloca memória no heap para o processo.                                   |
-| `arch_prctl` | Configura propriedades específicas da arquitetura, como o registrador FS.            |
-| `mmap`       | Mapeia arquivos ou dispositivos na memória, usado para alocar espaço.                |
-| `access`     | Verifica a existência e permissões de acesso de um arquivo.                          |
-| `openat`     | Abre um arquivo relativo a um diretório.                                             |
-| `read`       | Lê dados de um arquivo ou entrada, utilizado para ler o arquivo de origem.           |
-| `write`      | Escreve dados em um arquivo ou saída, utilizado para escrever no arquivo de destino. |
-| `close`      | Fecha um descritor de arquivo.                                                       |
-| `newfstatat` | Obtém informações sobre um arquivo (tamanho, permissões).                            |
-| `mprotect`   | Configura permissões de acesso à memória (leitura, escrita, execução).               |
-| `prlimit64`  | Define ou consulta limites de recursos do processo, como limite de stack.            |
-| `getrandom`  | Gera números aleatórios (usado para inicialização de segurança).                     |
-| `futex`      | Utilizado para sincronização entre threads.                                          |
-| `exit_group` | Finaliza o programa e todos os threads associados.                                   |
+| **Chamada**       | **Descrição**                                                                                                      |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `execve`          | Executa o programa `meuPrograma` no processo atual.                                                                |
+| `brk`             | Aloca ou desaloca memória no heap para o processo.                                                                 |
+| `arch_prctl`      | Configura propriedades específicas da arquitetura, como o registrador FS.                                          |
+| `mmap`            | Mapeia arquivos ou dispositivos na memória, usado para alocar espaço.                                              |
+| `access`          | Verifica a existência e permissões de acesso de um arquivo.                                                        |
+| `openat`          | Abre um arquivo relativo a um diretório.                                                                           |
+| `read`            | Lê dados de um arquivo ou entrada, utilizado para ler o arquivo de origem.                                         |
+| `write`           | Escreve dados em um arquivo ou saída, utilizado para escrever no arquivo de destino.                               |
+| `close`           | Fecha um descritor de arquivo.                                                                                     |
+| `newfstatat`      | Obtém informações sobre um arquivo (tamanho, permissões).                                                          |
+| `mprotect`        | Configura permissões de acesso à memória (leitura, escrita, execução).                                             |
+| `prlimit64`       | Define ou consulta limites de recursos do processo, como limite de stack.                                          |
+| `getrandom`       | Gera números aleatórios.                                                                                           |
+| `futex`           | Utilizado para sincronização entre threads.                                                                        |
+| `pread64`         | Lê dados de um arquivo em uma posição específica, usado para evitar movimentação do cursor.                        |
+| `munmap`          | Desfaz um mapeamento de memória, liberando o espaço alocado.                                                       |
+| `set_tid_address` | Define o endereço de um identificador de thread, usado para gerenciamento de threads.                              |
+| `set_robust_list` | Define a lista de mutexes robustos para recuperação de falhas de threads.                                          |
+| `rseq`            | Inicia e gerencia o registro de sequência em um processo, permitindo que threads registrem seu estado de execução. |
+| `exit_group`      | Finaliza o programa e todos os threads associados.                                                                 |
 
 ## Referência
 
 syscalls(2) - Linux manual page. Disponível em: <https://man7.org/linux/man-pages/man2/syscalls.2.html>. Acesso em: 14 nov. 2024.
-

@@ -11,7 +11,7 @@ SOURCES = main.cpp
 HEADERS = $(patsubst %.cpp,%.hpp,$(filter-out main.cpp,$(SOURCES)))
 
 # Lista todos os arquivos envolvidos
-FILES = $(SOURCES) $(HEADERS) Makefile relatorio.md source.html
+FILES = $(SOURCES) $(HEADERS) Makefile relatorio.md relatorio.pdf source.html
 
 # Definir o compilador
 CXX = g++
