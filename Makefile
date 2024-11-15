@@ -1,26 +1,27 @@
 # Nome do executável
-EXEC_NAME = meuPrograma
+EXEC_NAME = tarefa1
 
 # Nome do zip
-ZIP_NAME = MuriloAldigueriMarino-[B]
+ZIP_NAME = MuriloAldigueriMarino
 
 # Lista de arquivos fonte
-SOURCES = main.cpp
+SOURCES = tarefa1.c
 
 # Lista de headers (se houver)
-HEADERS = $(patsubst %.cpp,%.hpp,$(filter-out main.cpp,$(SOURCES)))
+# HEADERS = $(patsubst %.cpp,%.hpp,$(filter-out main.cpp,$(SOURCES)))
+HEADERS = checkPassword.h
 
 # Lista todos os arquivos envolvidos
-FILES = $(SOURCES) $(HEADERS) Makefile relatorio.md relatorio.pdf source.html
+FILES = $(SOURCES) $(HEADERS) Makefile
 
 # Definir o compilador
-CXX = g++
+CXX = gcc
 
 # Definir flags do compilador
-CXXFLAGS = -Wall -Wextra -std=c++17 -g
+CXXFLAGS = -Wall -Wextra
 
 # Gerar a lista de arquivos objeto a partir dos arquivos fonte
-OBJECTS = $(SOURCES:.cpp=.o)
+OBJECTS = $(SOURCES:.c=.o) checkPassword.o
 
 # Alvo padrão
 all: $(EXEC_NAME)
@@ -47,10 +48,9 @@ $(ZIP_NAME).zip: $(FILES)
 
 # clean: Limpa todos os arquivos gerados da compilação
 clean:
-	rm -f $(OBJECTS)
-	rm -f $(SOURCES:.cpp=.d)
 	rm -f $(EXEC_NAME)
 	rm -f *.o
+	rm -f *.d
 
 # valgrind: Regra para executar o programa com o Valgrind
 valgrind: all

@@ -4,7 +4,17 @@
         "*.gml": "cpp",
         "iostream": "cpp",
         "ostream": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "checkpassword.h": "c"
     },
-    "markdown-pdf.styles": [".vscode/custom.css"]
+    "markdown-pdf.styles": [
+        ".vscode/custom.css"
+    ],
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/lilo/Faculdade/SistemasOperacionais",
+            "binaryPath": "/home/lilo/Faculdade/SistemasOperacionais/tarefa1",
+            "binaryArgs": []
+        }
+    ]
 }
