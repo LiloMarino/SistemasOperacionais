@@ -7,20 +7,14 @@ ZIP_NAME = $(MODULE_NAME)
 # Lista de arquivos fonte
 SOURCES = $(MODULE_NAME).c
 
-# Lista de headers (se houver)
-HEADERS = 
-
 # Lista todos os arquivos envolvidos
 FILES = $(SOURCES) $(HEADERS) Makefile
 
-# Definir o compilador
-CXX = gcc
-
-# Flags para a compilação do módulo
-CXXFLAGS = -Wall -Wextra
-
 # Diretório do kernel
 KDIR = /lib/modules/$(shell uname -r)/build
+
+# Adiciona o arquivo .o ao obj-m para indicar que ele é um módulo
+obj-m += $(MODULE_NAME).o
 
 # Alvo padrão
 all: $(MODULE_NAME).ko
@@ -51,6 +45,7 @@ unload:
 	sudo rmmod $(MODULE_NAME)
 	dmesg | tail
 
+# finish: Compila, carrega, remove e zippa
 finish: all run unload clean zip
 
 .PHONY: all clean run zip unload finish

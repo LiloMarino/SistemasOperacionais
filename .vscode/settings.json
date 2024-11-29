@@ -5,7 +5,11 @@
         "iostream": "cpp",
         "ostream": "cpp",
         "fstream": "cpp",
-        "checkpassword.h": "c"
+        "checkpassword.h": "c",
+        "init.h": "c",
+        "kernel.h": "c",
+        "module.h": "c",
+        "moduleparam.h": "c"
     },
     "markdown-pdf.styles": [
         ".vscode/custom.css"
