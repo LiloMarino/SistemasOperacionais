@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include <pthread.h>
 #include <semaphore.h>
 #include <unistd.h>
@@ -24,6 +26,9 @@ void* barbeiro(void*) {
 }
 
 void* cliente(void*) {
+    // Espera de 1 a 15 segundos
+    int sleep_time = rand() % 15 + 1; 
+    sleep(sleep_time);
     sem_wait(&sem_mutex);           // Exclusão mútua para verificar fila
     if (clientes_esperando < NUM_CADEIRAS) {
         clientes_esperando++;
@@ -40,6 +45,8 @@ void* cliente(void*) {
 }
 
 int main() {
+    srand(time(0));
+
     pthread_t tid_barbeiro;
     pthread_t tid_clientes[10];
 
@@ -51,7 +58,6 @@ int main() {
 
     for (int i = 0; i < 10; i++) {
         pthread_create(&tid_clientes[i], nullptr, cliente, nullptr);
-        sleep(1); // Simula a chegada dos clientes
     }
 
     for (int i = 0; i < 10; i++) {
