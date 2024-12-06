@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <cstdlib>
 #include <ctime>
 #include <pthread.h>
@@ -14,13 +15,21 @@ int clientes_esperando = 0;
 
 void* barbeiro(void*) {
     while (true) {
-        sem_wait(&sem_clientes);    // Espera um cliente
-        sem_wait(&sem_mutex);       // Exclusão mútua para ajustar fila
-        clientes_esperando--;       
-        std::cout << "Barbeiro cortando cabelo. Clientes esperando: " << clientes_esperando << std::endl;
-        sem_post(&sem_mutex);       // Libera exclusão mútua
-        sem_post(&sem_barbeiro);    // Indica que o barbeiro está pronto
-        sleep(2);                   // Simula o tempo do corte de cabelo
+        sem_wait(&sem_mutex); // Exclusão mútua para verificar fila
+        if (clientes_esperando == 0) {
+            std::cout << std::left << std::setw(30) << "Barbeiro dormindo." << std::endl;
+        }
+        sem_post(&sem_mutex); // Libera exclusão mútua
+
+        sem_wait(&sem_clientes); // Espera por um cliente
+        sem_wait(&sem_mutex);    // Exclusão mútua para ajustar fila
+        clientes_esperando--;
+        std::cout << std::left << std::setw(30) << "Barbeiro cortando cabelo." 
+                  << std::right << std::setw(25) << "Clientes esperando: " 
+                  << clientes_esperando << std::endl;
+        sem_post(&sem_mutex);    // Libera exclusão mútua
+        sem_post(&sem_barbeiro); // Indica que o barbeiro está pronto
+        sleep(2);                // Simula o tempo do corte de cabelo
     }
     return nullptr;
 }
@@ -29,24 +38,25 @@ void* cliente(void*) {
     // Espera de 1 a 15 segundos
     int sleep_time = rand() % 15 + 1; 
     sleep(sleep_time);
-    sem_wait(&sem_mutex);           // Exclusão mútua para verificar fila
+    sem_wait(&sem_mutex); // Exclusão mútua para verificar fila
     if (clientes_esperando < NUM_CADEIRAS) {
         clientes_esperando++;
-        std::cout << "Cliente entrou. Clientes esperando: " << clientes_esperando << std::endl;
-        sem_post(&sem_mutex);       // Libera exclusão mútua
-        sem_post(&sem_clientes);    // Notifica chegada do cliente
-        sem_wait(&sem_barbeiro);    // Espera o barbeiro
-        std::cout << "Cliente sendo atendido." << std::endl;
+        std::cout << std::left << std::setw(30) << "Cliente entrou." 
+                  << std::right << std::setw(25) << "Clientes esperando: " 
+                  << clientes_esperando << std::endl;
+        sem_post(&sem_mutex); // Libera exclusão mútua
+        sem_post(&sem_clientes); // Notifica chegada do cliente
+        sem_wait(&sem_barbeiro); // Espera o barbeiro
+        std::cout << std::left << std::setw(30) << "Cliente sendo atendido." << std::endl;
     } else {
-        std::cout << "Sala cheia. Cliente saiu." << std::endl;
-        sem_post(&sem_mutex);       // Libera exclusão mútua
+        std::cout << std::left << std::setw(30) << "Sala cheia. Cliente saiu." << std::endl;
+        sem_post(&sem_mutex); // Libera exclusão mútua
     }
     return nullptr;
 }
 
 int main() {
     srand(time(0));
-
     pthread_t tid_barbeiro;
     pthread_t tid_clientes[10];
 
