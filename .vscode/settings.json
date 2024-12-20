@@ -20,5 +20,8 @@
             "binaryPath": "/home/lilo/Faculdade/SistemasOperacionais/tarefa1",
             "binaryArgs": []
         }
-    ]
+    ],
+    "code-runner.executorMap": {
+        "python": "clear; python3",
+    }
 }
