@@ -1,46 +1,59 @@
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
 
-# Definição da classe Processo
 class Processo:
-    def __init__(self, nome, execucao, ativacao, io_events):
+    def __init__(self, nome: str, execucao: int, ativacao: int, io_events: list[tuple[int, int]]):
         self.nome = nome
         self.execucao = execucao  # Tempo total de execução
         self.ativacao = ativacao  # Tempo em que o processo é ativado
         self.io_events = io_events  # Lista de eventos de I/O (tuples com tempo de início e duração)
         self.execucao_restante = execucao  # Tempo restante de execução
+        self.actual_io = 0  # Índice para o próximo evento de I/O
         self.timeline = []  # Lista para armazenar a timeline do processo
 
-    def processar_io(self, start_time, i):
+    def processar_io(self, start_time, end_time):
         """
-        Processa os eventos de I/O de um processo.
-        :param start_time: Tempo de início da execução ou I/O
-        :param i: Índice do próximo evento de I/O
-        :return: Lista de eventos de I/O para a timeline, novo start_time, índice de I/O incrementado
+        Adiciona um evento de I/O à timeline do processo.
+        :param start_time: Tempo de início da execução de I/O
+        :param end_time: Tempo de término da execução de I/O
+        :return: Nenhum valor retornado, apenas atualiza a timeline.
         """
-        if i < len(self.io_events) and self.io_events[i][0] <= (start_time - self.ativacao):
-            io_start = start_time
-            io_end = io_start + self.io_events[i][1]
-            # Adiciona o evento de I/O à timeline do processo
-            self.timeline.append(("I/O", io_start, io_end))
-            return io_end, i + 1
-        return start_time, i
+        self.timeline.append(("I/O", start_time, end_time))
 
-    def processar_execucao(self, start_time, exec_time, i):
+    def processar_execucao(self, start_time, end_time):
         """
-        Processa a execução de um processo até o próximo evento de I/O ou término.
+        Adiciona um evento de Execução à timeline do processo.
         :param start_time: Tempo de início da execução
-        :param exec_time: Tempo de execução que o processo pode realizar
-        :param i: Índice do próximo evento de I/O
-        :return: Lista de eventos de Execução para a timeline, novo start_time, tempo restante de execução, novo índice de I/O
+        :param end_time: Tempo de término da execução
+        :return: Nenhum valor retornado, apenas atualiza a timeline.
         """
-        if i < len(self.io_events):
-            exec_time = min(self.io_events[i][0], exec_time)  # Tempo até o próximo I/O
-        end_time = start_time + exec_time
-        self.execucao_restante -= exec_time
-        # Adiciona o evento de Execução à timeline do processo
+        self.execucao_restante -= end_time - start_time
         self.timeline.append(("Execução", start_time, end_time))
-        return end_time, i
+
+    def next_io(self):
+        """
+        Retorna o próximo evento de I/O do processo.
+        :return: O próximo evento de I/O ou None se não houver mais eventos.
+        """
+        if self.actual_io < len(self.io_events):
+            return self.io_events[self.actual_io]
+        return None  # Se não houver mais eventos de I/O, retorna None
+
+    def processar_next_io(self):
+        """
+        Avança para o próximo evento de I/O.
+        :return: Nenhum valor retornado, apenas avança para o próximo evento de I/O.
+        """
+        if self.actual_io < len(self.io_events):
+            self.actual_io += 1
+
+    @property
+    def tempo_executado(self):
+        """
+        Calcula o tempo total já executado pelo processo, baseado na timeline.
+        :return: O tempo total de execução (int).
+        """
+        return self.execucao - self.execucao_restante
 
 
 # Definição da classe Escalonador
@@ -58,26 +71,25 @@ class Escalonador:
         """
         fila = self.processos.copy()  # Fila de processos a serem executados
         while fila:
-            proc = fila.pop(0)
-            start_time = max(self.tempo_atual, proc.ativacao)
-            i = 0
-            exec_time = min(self.quantum, proc.execucao_restante)  # Tempo de execução até o quantum
+            processo : Processo = fila.pop(0)
+            quantum_start = max(self.tempo_atual, processo.ativacao)
+            quantum = min(self.quantum, processo.execucao_restante)
+            quantum_end = quantum_start + quantum
+            io = processo.next_io()
+            if io and io[0] <= processo.tempo_executado + quantum:
+                quantum_end = quantum_start + (io[0] - processo.tempo_executado)
+                processo.processar_execucao(quantum_start, quantum_end)
+                processo.processar_next_io()
+                processo.processar_io(quantum_end, quantum_end+io[1])
+            else:
+                processo.processar_execucao(quantum_start, quantum_end)
 
-            # Processar execução do processo
-            start_time, i = proc.processar_execucao(start_time, exec_time, i)
-            # Processar I/O do processo, se houver
-            start_time, i = proc.processar_io(start_time, i)
-
-            # Se o processo não terminou e não entrou em I/O, re-adiciona na fila
-            if proc.execucao_restante > 0 and i < len(proc.io_events):
-                fila.append(proc)
-            elif proc.execucao_restante > 0:
-                # Se o processo terminou a execução ou entrou em I/O, adiciona ele na fila novamente
-                fila.append(proc)
+            if processo.execucao_restante > 0:
+                fila.append(processo)
 
             # Atualiza o tempo do escalonador
-            self.turnarounds[proc.nome] = start_time - proc.ativacao
-            self.tempo_atual = start_time  # Atualiza o tempo para o próximo processo
+            self.turnarounds[processo.nome] = quantum_start - processo.ativacao
+            self.tempo_atual = quantum_end
 
     def get_timeline(self):
         """
@@ -108,7 +120,7 @@ def plot_gantt(timeline, title):
         for evento, start, end in eventos:
             criar_barrinha_gantt(ax, proc, start, end, evento, i)
 
-    ax.xaxis.set_major_locator(MultipleLocator(4))  # Escala de 4 em 4 no eixo X para o quantum
+    ax.xaxis.set_major_locator(MultipleLocator(5))  # Escala de 4 em 4 no eixo X para o quantum
     ax.set_xlabel("Tempo")
     ax.set_title(title)
     plt.grid(axis="x", linestyle="--", linewidth=0.5)
@@ -125,10 +137,10 @@ def plot_gantt(timeline, title):
 # Dados dos processos com I/O
 processos = [
     Processo("P1", 13, 0, [(4, 7)]),
-    Processo("P2", 11, 4, [(2, 7), (6, 4)]),
+    Processo("P2", 11, 4, [(2, 4), (6, 7)]),
     Processo("P3", 7, 5, []),
     Processo("P4", 8, 7, []),
-    Processo("P5", 12, 8, [(2, 4), (7, 7)]),
+    Processo("P5", 12, 8, [(2, 7), (7, 4)]),
 ]
 
 # Criando o escalonador Round-Robin com I/O e Quantum = 4

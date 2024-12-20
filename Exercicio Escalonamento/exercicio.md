@@ -22,6 +22,8 @@ Os processos são criados na ordem **P1**, **P2**, **P3**, **P4** e **P5**. As o
 
 Apresentar o gráfico de execução dos processos para os algoritmos de escalonamento **FIFO** (First-Come, First-Served) e **Round-Robin** (com Quantum = 4), e calcular o **turnaround** de cada processo para cada um desses algoritmos.
 
+---
+
 ## Resposta
 
 ### Gráfico de Execução para o Algoritmo FIFO
@@ -38,21 +40,21 @@ $$
 \text{Turnaround} = \text{Tempo de término} - \text{Tempo de ativação}
 $$
 
-| Processo | Tempo de Ativação | Tempo de Fim |
+| Processo | Tempo de Ativação | Tempo de Término |
 | -------- | ----------------- | ------------ |
-| P1       | X1                | X1 - 0       |
-| P2       | X2                | X2 - 4       |
-| P3       | X3                | X3 - 5       |
-| P4       | X4                | X4 - 7       |
-| P5       | X5                | X5 - 8       |
+| P1       | 0                 | 20           |
+| P2       | 4                 | 42           |
+| P3       | 5                 | 49           |
+| P4       | 7                 | 57           |
+| P5       | 8                 | 80           |
 
 #### Cálculos
 
-- **P1**: $ \text{Turnaround}_{P1} = X1 - 0 $
-- **P2**: $ \text{Turnaround}_{P2} = X2 - 4 $
-- **P3**: $ \text{Turnaround}_{P3} = X3 - 5 $
-- **P4**: $ \text{Turnaround}_{P4} = X4 - 7 $
-- **P5**: $ \text{Turnaround}_{P5} = X5 - 8 $
+- $ \text{Turnaround}_{P1} = 20 - 0 = 20 $
+- $ \text{Turnaround}_{P2} = 42 - 4 = 38 $
+- $ \text{Turnaround}_{P3} = 49 - 5 = 44 $
+- $ \text{Turnaround}_{P4} = 57 - 7 = 50 $
+- $ \text{Turnaround}_{P5} = 80 - 8 = 72 $
 
 ---
 
@@ -70,20 +72,24 @@ $$
 \text{Turnaround} = \text{Tempo de término} - \text{Tempo de ativação}
 $$
 
-| Processo | Tempo de Ativação | Tempo de Fim |
+| Processo | Tempo de Ativação | Tempo de Término |
 | -------- | ----------------- | ------------ |
-| P1       | X1                | X1 - 0       |
-| P2       | X2                | X2 - 4       |
-| P3       | X3                | X3 - 5       |
-| P4       | X4                | X4 - 7       |
-| P5       | X5                | X5 - 8       |
+| P1       | 0                 | 45           |
+| P2       | 4                 | 46           |
+| P3       | 5                 | 27           |
+| P4       | 7                 | 31           |
+| P5       | 8                 | 51           |
 
 #### Cálculos
 
-- **P1**: $ \text{Turnaround}_{P1} = Y1 - 0 $
-- **P2**: $ \text{Turnaround}_{P2} = Y2 - 4 $
-- **P3**: $ \text{Turnaround}_{P3} = Y3 - 5 $
-- **P4**: $ \text{Turnaround}_{P4} = Y4 - 7 $
-- **P5**: $ \text{Turnaround}_{P5} = Y5 - 8 $
+- $ \text{Turnaround}_{P1} = 45 - 0 = 45 $
+- $ \text{Turnaround}_{P2} = 46 - 4 = 42 $
+- $ \text{Turnaround}_{P3} = 27 - 5 = 22 $
+- $ \text{Turnaround}_{P4} = 31 - 7 = 24 $
+- $ \text{Turnaround}_{P5} = 51 - 8 = 43 $
 
 ---
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
+</script>
