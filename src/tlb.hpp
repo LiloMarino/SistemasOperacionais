@@ -1,7 +1,6 @@
 #ifndef TLB_HPP
 #define TLB_HPP
 
-#include "utils.hpp"
 #include <array>
 
 struct TLBMap
@@ -12,8 +11,12 @@ struct TLBMap
 
 class TLB
 {
+public:
+    static constexpr int TLB_SIZE = 16;
+
 private:
     std::array<TLBMap, TLB_SIZE> data;
+
 public:
 };
 

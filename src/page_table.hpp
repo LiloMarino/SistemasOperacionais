@@ -1,13 +1,16 @@
 #ifndef PAGE_TABLE_HPP
 #define PAGE_TABLE_HPP
 
-#include "utils.hpp"
 #include <array>
 
 class PageTable
 {
+public:
+    static constexpr int PAGES = 256;
+
 private:
-    std::array<int, FRAME_SIZE> data;
+    std::array<int, PAGES> data;
+
 public:
 };
 
