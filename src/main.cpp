@@ -23,7 +23,7 @@ int main(int argc, char const *argv[])
     addresses >> address;
 
     binary::print_binary(address);
-    binary::print_binary(binary::get_low_bits<uint16_t>(address, 16));
-    binary::print_binary(binary::get_low_bits<uint8_t>(binary::get_low_bits<uint16_t>(address, 16), 8));
-    binary::print_binary(binary::get_high_bits<uint8_t>(binary::get_low_bits<uint16_t>(address, 16), 8));
+    binary::print_binary(binary::get_low_bits<16>(address));
+    binary::print_binary(binary::get_low_bits<8>(binary::get_low_bits<16>(address)));
+    binary::print_binary(binary::get_high_bits<8>(binary::get_low_bits<16>(address)));
 }
