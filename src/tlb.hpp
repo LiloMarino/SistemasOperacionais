@@ -18,6 +18,7 @@ private:
     std::array<TLBMap, TLB_SIZE> data;
 
 public:
+    void printTLB();
 };
 
 #endif

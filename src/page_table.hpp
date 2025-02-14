@@ -12,6 +12,7 @@ private:
     std::array<int, PAGES> data;
 
 public:
+    void printPageTable();
 };
 
 #endif

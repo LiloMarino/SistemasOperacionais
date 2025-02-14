@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include "binary.hpp"
+#include "memory_manager.hpp"
 
 int main(int argc, char const *argv[])
 {
@@ -19,14 +20,16 @@ int main(int argc, char const *argv[])
         return EXIT_FAILURE;
     }
 
+    MemoryManager memory_manager(std::move(backing_store));
+
+    // Inicia o gerenciamento de memória
     uint32_t address;
     while(addresses >> address)
     {
         uint16_t logical_address = binary::get_low_bits<16>(address);
         uint8_t page_number = binary::get_high_bits<8>(logical_address);
         uint8_t offset = binary::get_low_bits<8>(logical_address);
-
-        Page page = binary::readPage(page_number, backing_store);
+        char content = memory_manager.getContent(page_number, offset);
     }
 
     return EXIT_SUCCESS;
