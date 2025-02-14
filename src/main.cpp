@@ -9,21 +9,25 @@ int main(int argc, char const *argv[])
     if (!backing_store)
     {
         std::cerr << "Erro ao abrir o arquivo BACKING_STORE.bin!" << std::endl;
-        return 1;
+        return EXIT_FAILURE;
     }
 
     std::ifstream addresses("addresses.txt");
     if (!addresses)
     {
         std::cerr << "Erro ao abrir o arquivo addresses.txt!" << std::endl;
-        return 1;
+        return EXIT_FAILURE;
     }
 
     uint32_t address;
-    addresses >> address;
+    while(addresses >> address)
+    {
+        uint16_t logical_address = binary::get_low_bits<16>(address);
+        uint8_t page_number = binary::get_high_bits<8>(logical_address);
+        uint8_t offset = binary::get_low_bits<8>(logical_address);
 
-    binary::print_binary(address);
-    binary::print_binary(binary::get_low_bits<16>(address));
-    binary::print_binary(binary::get_low_bits<8>(binary::get_low_bits<16>(address)));
-    binary::print_binary(binary::get_high_bits<8>(binary::get_low_bits<16>(address)));
+        Page page = binary::readPage(page_number, backing_store);
+    }
+
+    return EXIT_SUCCESS;
 }

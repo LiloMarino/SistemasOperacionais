@@ -31,6 +31,17 @@ namespace binary
     Page readPage(int page_number, std::ifstream &file);
     
     /**
+     * @brief Imprime o número em formato binário.
+     *
+     * @param num Número a ser impresso.
+     */
+    template <typename T>
+    void print_binary(T num)
+    {
+        std::cout << "0b" << std::bitset<sizeof(T) * 8>(num) << std::endl;
+    }
+
+    /**
      * @brief Obtém os n bits mais significativos de um número.
      * @tparam T Tipo original de num
      * @tparam N Número de bits a serem obtidos
@@ -55,19 +66,11 @@ namespace binary
     template <size_t N, typename T>
     constexpr auto get_low_bits(T num) -> smallest_uint_t<N> {
         static_assert(N <= sizeof(T) * 8, "N não pode ser maior que o número de bits do tipo original.");
-        return static_cast<smallest_uint_t<N>>(num & ((T(1) << N) - 1));
+        // Cria uma máscara de bits com N bits 1 a partir de 2^N - 1
+        auto mask = ((T(1) << N) - 1);
+        return static_cast<smallest_uint_t<N>>(num & mask);
     }
 
-    /**
-     * @brief Imprime o número em formato binário.
-     *
-     * @param num Número a ser impresso.
-     */
-    template <typename T>
-    void print_binary(T num)
-    {
-        std::cout << "0b" << std::bitset<sizeof(T) * 8>(num) << std::endl;
-    }
 }
 
 #endif
