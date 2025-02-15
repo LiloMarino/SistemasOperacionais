@@ -2,6 +2,7 @@
 #define MEMORY_MANAGER_HPP
 
 #include <fstream>
+#include <tuple>
 #include "tlb.hpp"
 #include "physical_memory.hpp"
 #include "page_table.hpp"
@@ -25,9 +26,9 @@ public:
      * @brief Obtém o conteúdo de um endereço da memória
      * @param page_number Número da página
      * @param offset Offset dentro da página
-     * @return O conteúdo da memória
+     * @return O endereço físico e seu conteúdo
      */
-    char getContent(int page_number, int offset);
+    std::tuple<int, char> getContent(int page_number, int offset);
 };
 
 #endif

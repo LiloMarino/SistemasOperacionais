@@ -24,12 +24,13 @@ int main(int argc, char const *argv[])
 
     // Inicia o gerenciamento de memória
     uint32_t address;
-    while(addresses >> address)
+    while (addresses >> address)
     {
         uint16_t logical_address = binary::get_low_bits<16>(address);
         uint8_t page_number = binary::get_high_bits<8>(logical_address);
         uint8_t offset = binary::get_low_bits<8>(logical_address);
-        char content = memory_manager.getContent(page_number, offset);
+        auto [physical_address, content] = memory_manager.getContent(page_number, offset);
+        std::cout << "Endereço Virtual: " << address << " Endereço Físico: " << physical_address << "  Conteúdo: " << content << std::endl;
     }
 
     return EXIT_SUCCESS;

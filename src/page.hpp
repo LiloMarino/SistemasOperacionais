@@ -26,4 +26,9 @@ public:
     std::array<char, PAGE_SIZE> &getData();
 };
 
+/**
+ * @brief Alias para representar um quadro (frame) na memória física.
+ */
+using Frame = Page;
+
 #endif
