@@ -10,28 +10,24 @@ void PhysicalMemory::setPageRemoveCallback(std::function<void(int)> callback)
 
 int PhysicalMemory::addPage(Page &&page)
 {
-    int frame_index = replacement_policy(fifo_queue, access_counters);
-
-    if (frame_index == -1)
+    // Procura um quadro livre para adicionar a página
+    for (int frame_index = 0; frame_index < memory.size(); frame_index++)
     {
-        for (int i = 0; i < memory.size(); i++)
+        if (memory[frame_index].isEmpty())
         {
-            if (memory[i].isEmpty())
-            {
-                frame_index = i;
-                break;
-            }
+            memory[frame_index] = std::move(page);
+            fifo_queue.push(frame_index);
+            access_counters[frame_index] = timestamp++;
+            return frame_index;
         }
     }
 
-    if (frame_index != -1)
-    {
-        memory[frame_index] = std::move(page);
-        on_page_remove(frame_index);
-        fifo_queue.push(frame_index);
-        access_counters[frame_index] = timestamp++;
-    }
-
+    // Se nenhum quadro estiver livre utiliza a política de substituição
+    int frame_index = replacement_policy(fifo_queue, access_counters);
+    memory[frame_index] = std::move(page);
+    on_page_remove(frame_index);
+    fifo_queue.push(frame_index);
+    access_counters[frame_index] = timestamp++;
     return frame_index;
 }
 
