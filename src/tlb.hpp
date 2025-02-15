@@ -6,8 +6,8 @@
 
 struct TLBMap
 {
-    int page_number;
-    int frame_index;
+    int page_number = -1;
+    int frame_index = -1;
 };
 
 class TLB
