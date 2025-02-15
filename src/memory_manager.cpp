@@ -2,7 +2,13 @@
 #include "binary.hpp"
 
 MemoryManager::MemoryManager(std::ifstream &&backing_store, ReplacementPolicy policy, int num_frames)
-    : backing_store(std::move(backing_store)), tlb(policy), physical_memory(num_frames, policy) {}
+    : backing_store(std::move(backing_store)), tlb(policy), physical_memory(num_frames, policy)
+{
+    physical_memory.setPageRemoveCallback(
+        [this](int page_number)
+        { page_table.removePage(page_number); 
+        });
+}
 
 std::tuple<int, char> MemoryManager::getContent(int page_number, int offset)
 {
@@ -39,6 +45,6 @@ std::tuple<int, char> MemoryManager::getContent(int page_number, int offset)
             content = physical_memory.getFrame(frame_index).getByte(offset);
         }
     }
-    
+
     return {physical_address, content};
 }

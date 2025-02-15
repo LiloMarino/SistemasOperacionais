@@ -2,6 +2,7 @@
 #define PHYSICAL_MEMORY_HPP
 
 #include <array>
+#include <functional>
 #include "page.hpp"
 #include "replacement_policy.hpp"
 
@@ -12,6 +13,7 @@ private:
     std::queue<int> fifo_queue;
     std::unordered_map<int, int> access_counters;
     ReplacementPolicy replacement_policy;
+    std::function<void(int)> on_page_remove; // Callback para "evento" de remoção de página
     int timestamp = 0;
 
 public:
@@ -21,6 +23,12 @@ public:
      * @param policy Política de substituição
      */
     PhysicalMemory(int num_frames, ReplacementPolicy policy);
+
+    /**
+     * @brief Define o callback para o evento de remoção de uma página
+     * @param callback Callback para o evento de remoção
+     */
+    void setPageRemoveCallback(std::function<void(int)> callback);
 
     /**
      * @brief Adiciona uma página na memória física
