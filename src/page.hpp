@@ -10,7 +10,7 @@ public:
 
 private:
     std::array<char, PAGE_SIZE> data;
-    int page_number;
+    int page_number = -1;
 
 public:
     /**
@@ -24,6 +24,12 @@ public:
      * @return Referência para os dados da página
      */
     std::array<char, PAGE_SIZE> &getData();
+
+    /**
+     * @brief Verifica se a página está vazia
+     * @return Verdadeiro se a página estiver vazia, falso caso contrário
+     */
+    bool isEmpty();
 };
 
 /**

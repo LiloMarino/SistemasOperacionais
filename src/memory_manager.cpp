@@ -1,7 +1,7 @@
 #include "memory_manager.hpp"
 
-MemoryManager::MemoryManager(std::ifstream &&backing_store)
-    : backing_store(std::move(backing_store)) {}
+MemoryManager::MemoryManager(std::ifstream &&backing_store, ReplacementPolicy policy)
+    : backing_store(std::move(backing_store)), tlb(policy), physical_memory(policy) {}
 
 std::tuple<int, char> MemoryManager::getContent(int page_number, int offset)
 {

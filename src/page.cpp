@@ -9,3 +9,8 @@ std::array<char, Page::PAGE_SIZE> &Page::getData()
 {
     return data;
 }
+
+bool Page::isEmpty()
+{
+    return page_number == -1;
+}

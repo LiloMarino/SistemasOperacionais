@@ -19,8 +19,9 @@ public:
     /**
      * @brief Construtor de MemoryManager
      * @param backing_store Arquivo de backing store
+     * @param policy Política de substituição
      */
-    MemoryManager(std::ifstream &&backing_store);
+    MemoryManager(std::ifstream &&backing_store, ReplacementPolicy policy);
 
     /**
      * @brief Obtém o conteúdo de um endereço da memória
