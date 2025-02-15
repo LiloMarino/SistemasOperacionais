@@ -67,6 +67,6 @@ void MemoryManager::getSummary()
     std::cout << "Acessos de memória: " << address_accesses << std::endl;
     std::cout << "TLB misses: " << tlb.getTLBMiss() << std::endl;
     std::cout << "Page faults: " << page_table.getPageFault() << std::endl;
-    std::cout << "TLB hit rate: " << static_cast<double>(address_accesses - tlb.getTLBMiss()) / address_accesses << std::endl;
-    std::cout << "Page fault rate: " << static_cast<double>(page_table.getPageFault()) / address_accesses << std::endl;
+    std::cout << "TLB hit rate: " << (static_cast<double>(address_accesses - tlb.getTLBMiss()) / address_accesses) * 100 << "% " << std::endl;
+    std::cout << "Page fault rate: " << (static_cast<double>(page_table.getPageFault()) / address_accesses) * 100 << "% " << std::endl;
 }

@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <cctype>
+#include <iomanip>
 #include "binary.hpp"
 #include "memory_manager.hpp"
 
@@ -66,9 +67,9 @@ int main(int argc, char const *argv[])
             uint8_t page_number = binary::get_high_bits<8>(logical_address);
             uint8_t offset = binary::get_low_bits<8>(logical_address);
             auto [physical_address, content] = memory_manager.getContent(page_number, offset);
-            std::cout << "Endereço Virtual: " << address
-                      << " Endereço Físico: " << physical_address
-                      << " Conteúdo: " << content << std::endl;
+            std::cout << "Endereço Virtual: " << std::setw(6) << address
+                      << " Endereço Físico: " << std::setw(6) << physical_address
+                      << " Conteúdo: " << std::right << static_cast<int>(content) << std::endl;
         }
         else if (line == "PageTable")
         {
@@ -83,6 +84,7 @@ int main(int argc, char const *argv[])
             std::cerr << "Comando desconhecido ignorado: " << line << std::endl;
         }
     }
+    memory_manager.getSummary();
 
     return EXIT_SUCCESS;
 }
