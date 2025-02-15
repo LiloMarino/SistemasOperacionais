@@ -45,6 +45,12 @@ public:
     int getFrame(int page_number);
 
     /**
+     * @brief Obtém o número de TLB miss
+     * @return Número de TLB miss
+     */
+    int getTLBMiss() const;
+
+    /**
      * @brief Imprime o conteúdo da TLB
      */
     void printTLB();

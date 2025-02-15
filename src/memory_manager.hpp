@@ -14,6 +14,7 @@ private:
     TLB tlb;
     PageTable page_table;
     PhysicalMemory physical_memory;
+    unsigned int address_accesses = 0;
 
 public:
     /**
@@ -31,6 +32,21 @@ public:
      * @return O endereço físico e seu conteúdo
      */
     std::tuple<int, char> getContent(int page_number, int offset);
+
+    /**
+     * @brief Imprime a tabela de paginas
+     */
+    void printPageTable();
+
+    /**
+     * @brief Imprime a TLB
+     */
+    void printTLB();
+
+    /**
+     * @brief Imprime o resumo das estatísticas de acessos de memória
+     */
+    void getSummary();
 };
 
 #endif

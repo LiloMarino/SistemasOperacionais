@@ -39,6 +39,12 @@ public:
      * @return Índice do quadro associado
      */
     int getPage(int page_number);
+
+    /**
+     * @brief Obtém o número de falta de páginas
+     * @return Número de falta de páginas
+     */
+    int getPageFault() const; 
     
     /**
      * @brief Imprime o conteúdo da tabela de páginas

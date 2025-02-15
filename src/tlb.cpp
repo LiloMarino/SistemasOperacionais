@@ -1,4 +1,6 @@
 #include "tlb.hpp"
+#include <iostream>
+#include <iomanip>
 
 TLB::TLB(ReplacementPolicy policy)
     : replacement_policy(policy) {}
@@ -51,4 +53,19 @@ int TLB::getFrame(int page_number)
     }
     tlb_miss++;
     return -1;
+}
+
+int TLB::getTLBMiss() const
+{
+    return tlb_miss;
+}
+
+void TLB::printTLB()
+{
+    std::cout << "************" << std::endl;
+    for (const auto &entry : data)
+    {
+        std::cout << std::setw(4) << entry.page_number << " - " << std::setw(4) << entry.frame_index << std::endl;
+    }
+    std::cout << "************" << std::endl;
 }

@@ -6,12 +6,14 @@ MemoryManager::MemoryManager(std::ifstream &&backing_store, ReplacementPolicy po
 {
     physical_memory.setPageRemoveCallback(
         [this](int page_number)
-        { page_table.removePage(page_number); 
+        {
+            page_table.removePage(page_number);
         });
 }
 
 std::tuple<int, char> MemoryManager::getContent(int page_number, int offset)
 {
+    address_accesses++;
     int physical_address = -1;
     char content = '\0';
 
@@ -47,4 +49,24 @@ std::tuple<int, char> MemoryManager::getContent(int page_number, int offset)
     }
 
     return {physical_address, content};
+}
+
+void MemoryManager::printPageTable()
+{
+    page_table.printPageTable();
+}
+
+void MemoryManager::printTLB()
+{
+    tlb.printTLB();
+}
+
+void MemoryManager::getSummary()
+{
+    std::cout << "=== Resumo das estatísticas ===" << std::endl;
+    std::cout << "Acessos de memória: " << address_accesses << std::endl;
+    std::cout << "TLB misses: " << tlb.getTLBMiss() << std::endl;
+    std::cout << "Page faults: " << page_table.getPageFault() << std::endl;
+    std::cout << "TLB hit rate: " << static_cast<double>(address_accesses - tlb.getTLBMiss()) / address_accesses << std::endl;
+    std::cout << "Page fault rate: " << static_cast<double>(page_table.getPageFault()) / address_accesses << std::endl;
 }

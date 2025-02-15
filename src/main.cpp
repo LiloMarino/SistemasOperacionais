@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cctype>
 #include "binary.hpp"
 #include "memory_manager.hpp"
 
@@ -51,17 +52,36 @@ int main(int argc, char const *argv[])
         std::cerr << "Erro ao abrir o arquivo BACKING_STORE.bin!" << std::endl;
         return EXIT_FAILURE;
     }
-    
+
     // Inicia o gerenciamento de memória
     MemoryManager memory_manager(std::move(backing_store), replacement_policy, num_frames);
-    uint32_t address;
-    while (addresses >> address)
+    std::string line;
+    while (std::getline(addresses, line))
     {
-        uint16_t logical_address = binary::get_low_bits<16>(address);
-        uint8_t page_number = binary::get_high_bits<8>(logical_address);
-        uint8_t offset = binary::get_low_bits<8>(logical_address);
-        auto [physical_address, content] = memory_manager.getContent(page_number, offset);
-        std::cout << "Endereço Virtual: " << address << " Endereço Físico: " << physical_address << "  Conteúdo: " << content << std::endl;
+        if (!line.empty() && std::isdigit(line[0]))
+        {
+            // É um endereço então processa
+            uint32_t address = std::stoul(line);
+            uint16_t logical_address = binary::get_low_bits<16>(address);
+            uint8_t page_number = binary::get_high_bits<8>(logical_address);
+            uint8_t offset = binary::get_low_bits<8>(logical_address);
+            auto [physical_address, content] = memory_manager.getContent(page_number, offset);
+            std::cout << "Endereço Virtual: " << address
+                      << " Endereço Físico: " << physical_address
+                      << " Conteúdo: " << content << std::endl;
+        }
+        else if (line == "PageTable")
+        {
+            memory_manager.printPageTable();
+        }
+        else if (line == "TLB")
+        {
+            memory_manager.printTLB();
+        }
+        else
+        {
+            std::cerr << "Comando desconhecido ignorado: " << line << std::endl;
+        }
     }
 
     return EXIT_SUCCESS;
