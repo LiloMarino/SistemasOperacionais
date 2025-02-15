@@ -2,6 +2,7 @@
 #define TLB_HPP
 
 #include <array>
+#include "replacement_policy.hpp"
 
 struct TLBMap
 {
@@ -16,8 +17,17 @@ public:
 
 private:
     std::array<TLBMap, TLB_SIZE> data;
+    std::queue<int> fifo_queue;
+    std::unordered_map<int, int> access_counters;
+    ReplacementPolicy replacement_policy;
 
 public:
+    /**
+     * @brief Construtor de TLB
+     * @param policy Política de substituição
+     */
+    TLB(ReplacementPolicy policy);
+
     /**
      * @brief Adiciona uma entrada na TLB
      * @param page_number Número da página

@@ -3,6 +3,7 @@
 
 #include <array>
 #include "page.hpp"
+#include "replacement_policy.hpp"
 
 class PhysicalMemory
 {
@@ -11,8 +12,18 @@ public:
 
 private:
     std::array<Frame, FRAMES> memory;
+    std::queue<int> fifo_queue;
+    std::unordered_map<int, int> access_counters;
+    int timestamp = 0;
+    ReplacementPolicy replacement_policy;
 
 public:
+    /**
+     * @brief Construtor de PhysicalMemory
+     * @param policy Política de substituição
+     */
+    PhysicalMemory(ReplacementPolicy policy);
+
     /**
      * @brief Adiciona uma página na memória física
      * @param page Página a ser adicionada
