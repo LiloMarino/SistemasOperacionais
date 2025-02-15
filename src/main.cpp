@@ -6,23 +6,54 @@
 
 int main(int argc, char const *argv[])
 {
+    // Recebe os argumentos
+    if (argc != 4)
+    {
+        std::cerr << "Uso incorreto! A sintaxe correta é:" << std::endl;
+        std::cerr << "<executável> address.txt [Quadros] [Alg Subst Página]" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    std::string address_file = argv[1];
+    std::ifstream addresses(address_file);
+    if (!addresses)
+    {
+        std::cerr << "Erro ao abrir o arquivo: " << address_file << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    int num_frames = std::stoi(argv[2]);
+    if (num_frames <= 0 || (num_frames & (num_frames - 1)) != 0)
+    {
+        std::cerr << "O número de quadros deve ser uma potência de 2!" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    std::string replacement_algorithm = argv[3];
+    ReplacementPolicy replacement_policy;
+    if (replacement_algorithm == "FIFO")
+    {
+        replacement_policy = fifo_policy;
+    }
+    else if (replacement_algorithm == "LRU")
+    {
+        replacement_policy = lru_policy;
+    }
+    else
+    {
+        std::cerr << "Erro: O algoritmo de substituição deve ser FIFO ou LRU." << std::endl;
+        return EXIT_FAILURE;
+    }
+
     std::ifstream backing_store("BACKING_STORE.bin", std::ios::binary);
     if (!backing_store)
     {
         std::cerr << "Erro ao abrir o arquivo BACKING_STORE.bin!" << std::endl;
         return EXIT_FAILURE;
     }
-
-    std::ifstream addresses("addresses.txt");
-    if (!addresses)
-    {
-        std::cerr << "Erro ao abrir o arquivo addresses.txt!" << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    MemoryManager memory_manager(std::move(backing_store));
-
+    
     // Inicia o gerenciamento de memória
+    MemoryManager memory_manager(std::move(backing_store), replacement_policy, num_frames);
     uint32_t address;
     while (addresses >> address)
     {

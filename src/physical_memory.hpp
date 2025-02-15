@@ -7,11 +7,8 @@
 
 class PhysicalMemory
 {
-public:
-    static constexpr int FRAMES = 256;
-
 private:
-    std::array<Frame, FRAMES> memory;
+    std::vector<Frame> memory;
     std::queue<int> fifo_queue;
     std::unordered_map<int, int> access_counters;
     ReplacementPolicy replacement_policy;
@@ -20,9 +17,10 @@ private:
 public:
     /**
      * @brief Construtor de PhysicalMemory
+     * @param num_frames Número de quadros na memória física
      * @param policy Política de substituição
      */
-    PhysicalMemory(ReplacementPolicy policy);
+    PhysicalMemory(int num_frames, ReplacementPolicy policy);
 
     /**
      * @brief Adiciona uma página na memória física

@@ -1,6 +1,9 @@
 # Nome do executável
 EXEC_NAME = program
 
+# Argumentos para o executável
+ARGUMENTS = addresses.txt 256 FIFO
+
 # Nome do zip
 ZIP_NAME = AT5_MuriloMarino
 
@@ -36,7 +39,7 @@ clean:
 
 # Alvo para executar o programa
 run: all $(EXEC_NAME)
-	./$(EXEC_NAME)
+	./$(EXEC_NAME) $(ARGUMENTS)
 
 # Alvo para criar um zip com os arquivos fonte
 zip:

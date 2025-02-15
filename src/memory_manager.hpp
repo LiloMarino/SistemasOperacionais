@@ -20,8 +20,9 @@ public:
      * @brief Construtor de MemoryManager
      * @param backing_store Arquivo de backing store
      * @param policy Política de substituição
+     * @param num_frames Número de quadros
      */
-    MemoryManager(std::ifstream &&backing_store, ReplacementPolicy policy);
+    MemoryManager(std::ifstream &&backing_store, ReplacementPolicy policy, int num_frames);
 
     /**
      * @brief Obtém o conteúdo de um endereço da memória
