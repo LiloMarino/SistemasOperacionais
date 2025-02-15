@@ -18,5 +18,6 @@ int PageTable::getPage(int page_number)
     {
         return data[page_number].frame_index;
     }
+    page_fault++;
     return -1;
 }

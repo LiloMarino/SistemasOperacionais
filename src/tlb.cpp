@@ -49,5 +49,6 @@ int TLB::getFrame(int page_number)
             return entry.frame_index;
         }
     }
+    tlb_miss++;
     return -1;
 }

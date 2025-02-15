@@ -16,6 +16,7 @@ public:
 
 private:
     std::array<PageTableMap, PAGES> data;
+    unsigned int page_fault = 0;
 
 public:
     

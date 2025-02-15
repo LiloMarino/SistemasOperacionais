@@ -20,6 +20,7 @@ private:
     std::queue<int> fifo_queue;
     std::unordered_map<int, int> access_counters;
     ReplacementPolicy replacement_policy;
+    unsigned int tlb_miss = 0;
     int timestamp = 0;
 
 public:
