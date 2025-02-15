@@ -5,7 +5,7 @@ EXEC_NAME = program
 ARGUMENTS = addresses.txt 256 FIFO
 
 # Nome do zip
-ZIP_NAME = AT5_MuriloMarino
+ZIP_NAME = MuriloMarino_MemoriaVirtual
 
 # Diretórios
 SRC_DIR = src
