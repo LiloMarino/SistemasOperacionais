@@ -21,10 +21,16 @@ public:
     
     /**
      * @brief Adiciona uma entrada na tabela de paginas
+     * @param page_number Número da página
      * @param frame_index Índice do quadro associado
-     * @param present Indica se a página está presente na memória
      */
-    void addPage(int frame_index, bool present);
+    void addPage(int page_number, int frame_index);
+
+    /**
+     * @brief Remove uma entrada da tabela de páginas
+     * @param page_number Número da página
+     */
+    void removePage(int page_number);
 
     /**
      * @brief Obtém o quadro associado a uma página

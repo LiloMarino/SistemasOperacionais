@@ -26,6 +26,13 @@ public:
     std::array<char, PAGE_SIZE> &getData();
 
     /**
+     * @brief Obtém um byte da página
+     * @param offset Offset dentro da página
+     * @return O byte na posição especificada
+     */
+    char getByte(int offset);
+
+    /**
      * @brief Verifica se a página está vazia
      * @return Verdadeiro se a página estiver vazia, falso caso contrário
      */
