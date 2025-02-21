@@ -33,6 +33,12 @@ public:
     char getByte(int offset);
 
     /**
+     * @brief Obtém o número da página
+     * @return Número da página
+     */
+    int getPageNumber();
+
+    /**
      * @brief Verifica se a página está vazia
      * @return Verdadeiro se a página estiver vazia, falso caso contrário
      */

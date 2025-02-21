@@ -15,6 +15,11 @@ char Page::getByte(int offset)
     return data[offset];
 }
 
+int Page::getPageNumber()
+{
+    return page_number;
+}
+
 bool Page::isEmpty()
 {
     return page_number == -1;

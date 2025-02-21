@@ -24,8 +24,8 @@ int PhysicalMemory::addPage(Page &&page)
 
     // Se nenhum quadro estiver livre utiliza a política de substituição
     int frame_index = replacement_policy(fifo_queue, access_counters);
+    on_page_remove(memory[frame_index].getPageNumber());
     memory[frame_index] = std::move(page);
-    on_page_remove(frame_index);
     fifo_queue.push(frame_index);
     access_counters[frame_index] = timestamp++;
     return frame_index;
