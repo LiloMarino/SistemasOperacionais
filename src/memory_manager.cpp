@@ -41,7 +41,7 @@ std::tuple<int, char> MemoryManager::getContent(int page_number, int offset)
             // Não encontrou na tabela de páginas (Page fault)
             Page page = binary::readPage(page_number, backing_store);
             frame_index = physical_memory.addPage(std::move(page));
-            page_table.addPage(frame_index, true);
+            page_table.addPage(page_number, frame_index);
             tlb.addPage(page_number, frame_index);
             physical_address = frame_index * Page::PAGE_SIZE + offset;
             content = physical_memory.getFrame(frame_index).getByte(offset);
