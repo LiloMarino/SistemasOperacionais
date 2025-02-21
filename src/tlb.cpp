@@ -22,6 +22,7 @@ void TLB::addPage(int page_number, int frame_index)
 
     // Se nenhuma entrada livre utiliza a política de substituição
     int remove = replacement_policy(fifo_queue, access_counters);
+    access_counters.erase(remove);
     for (auto &entry : data)
     {
         if (entry.page_number == remove)
